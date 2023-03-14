@@ -3376,6 +3376,15 @@ public class AnnotatedTypeFactory implements AnnotationProvider {
     }
 
     /**
+     * See {@link #getAnnotatedType(Tree)}.
+     *
+     * @see #getAnnotatedType(Tree)
+     */
+    public AnnotatedTypeMirror getAnnotatedTypeWithReceiverRefinement(Tree tree) {
+        return getAnnotatedType(tree);
+    }
+
+    /**
      * See {@link #fromElement(Element)}.
      *
      * @see #fromElement(Element)
