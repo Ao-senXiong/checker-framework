@@ -1,4 +1,4 @@
-# The Checker Framework:  pluggable type-checking for Java
+# The Checker Framework:  pluggable type-checking for Java [![Build Status](https://github.com/opprop/checker-framework-inference/workflows/CI/badge.svg)](https://github.com/opprop/checker-framework-inference/actions/workflows/main.yml)
 
 Please see the Checker Framework manual
 ([HTML](https://eisop.github.io/cf/manual/),
