@@ -251,8 +251,8 @@ public class AnnotatedTypes {
             }
             if (enclosingType == null) {
                 // TODO: work around a failure in guava that happens without this hack.
-                // throw new BugInCF("Enclosing type not found %s %s", dt, superType);
-                return superType;
+                throw new BugInCF("Enclosing type not found %s %s", dt, superType);
+                //                return superType;
             }
             return asSuper(atypeFactory, dt, superType);
         }
