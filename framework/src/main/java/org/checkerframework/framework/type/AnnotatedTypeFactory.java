@@ -2906,10 +2906,6 @@ public class AnnotatedTypeFactory implements AnnotationProvider {
         AnnotatedExecutableType con = getAnnotatedType(ctor); // get unsubstituted type
         constructorFromUsePreSubstitution(tree, con);
 
-        if (viewpointAdapter != null) {
-            viewpointAdapter.viewpointAdaptConstructor(type, ctor, con);
-        }
-
         if (tree.getClassBody() != null) {
             // Because the anonymous constructor can't have explicit annotations on its parameters,
             // they are copied from the super constructor invoked in the anonymous constructor. To
@@ -2956,6 +2952,10 @@ public class AnnotatedTypeFactory implements AnnotationProvider {
             // vararg type again.
             con.computeVarargType();
             con = AnnotatedTypes.asMemberOf(types, this, type, ctor, con);
+        }
+
+        if (viewpointAdapter != null) {
+            viewpointAdapter.viewpointAdaptConstructor(type, ctor, con);
         }
 
         Map<TypeVariable, AnnotatedTypeMirror> typeParamToTypeArg =
