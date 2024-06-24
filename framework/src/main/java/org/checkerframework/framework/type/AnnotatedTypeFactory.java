@@ -2989,7 +2989,7 @@ public class AnnotatedTypeFactory implements AnnotationProvider {
         }
 
         if (ctor.getEnclosingElement().getKind() == ElementKind.ENUM) {
-            Set<AnnotationMirror> enumAnnos = getEnumConstructorQualifiers();
+            AnnotationMirrorSet enumAnnos = getEnumConstructorQualifiers();
             con.getReturnType().replaceAnnotations(enumAnnos);
         }
 
@@ -3009,8 +3009,8 @@ public class AnnotatedTypeFactory implements AnnotationProvider {
      *
      * @return the annotations that should be applied to enum constructors
      */
-    protected Set<AnnotationMirror> getEnumConstructorQualifiers() {
-        return Collections.emptySet();
+    protected AnnotationMirrorSet getEnumConstructorQualifiers() {
+        return new AnnotationMirrorSet();
     }
 
     /**
