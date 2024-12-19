@@ -1,0 +1,14 @@
+-classpath
+/Users/aosenxiong/waterloo/eisop/checker-framework/checker/dist/checker-util.jar:/Users/aosenxiong/waterloo/eisop/checker-framework/checker/dist/checker-qual.jar:.
+-processorpath
+/Users/aosenxiong/waterloo/eisop/checker-framework/checker/dist/checker-util.jar:/Users/aosenxiong/waterloo/eisop/checker-framework/checker/dist/checker.jar:/Users/aosenxiong/waterloo/eisop/checker-framework/checker/dist/checker-util.jar:/Users/aosenxiong/waterloo/eisop/checker-framework/checker/dist/checker-qual.jar:.
+-processor
+org.checkerframework.checker.pico.PICOChecker
+-AassumeInitialized
+--patch-module
+java.base=../jdk/src/java.base/share/classes
+-Xmaxerrs
+5000
+-nowarn
+-XDignore.symbol.file=true
+ArrayList.java
