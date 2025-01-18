@@ -104,6 +104,16 @@ public class PICONoInitVisitor extends BaseTypeVisitor<PICONoInitAnnotatedTypeFa
         return !AnnotationUtils.areSame(used, atypeFactory.BOTTOM);
     }
 
+    @Override
+    protected boolean checkOverride(
+            MethodTree overriderTree,
+            AnnotatedExecutableType overriderMethodType,
+            AnnotatedDeclaredType overriderType,
+            AnnotatedExecutableType overriddenMethodType,
+            AnnotatedDeclaredType overriddenType) {
+        return true;
+    }
+
     /**
      * Check if the lhs is adapted subtype of rhs.
      *
