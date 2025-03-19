@@ -586,7 +586,7 @@ public class UnitsAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
         public UnitsQualifierHierarchy() {
             super(
                     UnitsAnnotatedTypeFactory.this.getSupportedTypeQualifiers(),
-                    elements,
+                    UnitsAnnotatedTypeFactory.this.elements,
                     UnitsAnnotatedTypeFactory.this);
         }
 
