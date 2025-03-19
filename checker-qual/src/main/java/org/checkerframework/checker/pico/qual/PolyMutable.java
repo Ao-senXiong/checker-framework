@@ -27,4 +27,12 @@ import java.lang.annotation.Target;
     TypeUseLocation.RETURN,
     TypeUseLocation.LOCAL_VARIABLE
 })
-public @interface PolyMutable {}
+public @interface PolyMutable {
+    /**
+     * The value of a polymorphic qualifier. It is used to distinguish different polymorphic
+     * qualifiers.
+     *
+     * @return the value of the annotation
+     */
+    String value() default "";
+}

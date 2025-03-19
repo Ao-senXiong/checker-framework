@@ -22,6 +22,7 @@ import org.checkerframework.common.basetype.BaseTypeChecker;
 import org.checkerframework.framework.type.AnnotatedTypeFactory;
 import org.checkerframework.framework.type.AnnotatedTypeMirror;
 import org.checkerframework.framework.type.AnnotatedTypeMirror.AnnotatedExecutableType;
+import org.checkerframework.framework.type.ElementForPolyQualifierHierarchy;
 import org.checkerframework.framework.type.GenericAnnotatedTypeFactory;
 import org.checkerframework.framework.type.QualifierHierarchy;
 import org.checkerframework.framework.type.ViewpointAdapter;
@@ -43,6 +44,7 @@ import org.checkerframework.javacutil.TreeUtils;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -57,6 +59,7 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.Elements;
 
 /** AnnotatedTypeFactory for PICO. */
 public class PICONoInitAnnotatedTypeFactory
@@ -617,6 +620,33 @@ public class PICONoInitAnnotatedTypeFactory
                 type.addMissingAnnotations(Collections.singleton(picoTypeFactory.IMMUTABLE));
             }
             return super.visitDeclared(type, aVoid);
+        }
+    }
+
+    private static class PICOQualifierHierarchy extends ElementForPolyQualifierHierarchy {
+
+        /**
+         * Creates a PICOQualifierHierarchy from the given classes.
+         *
+         * @param qualifierClasses classes of annotations that are the qualifiers
+         * @param elements element utils
+         * @param atypeFactory the associated type factory
+         */
+        public PICOQualifierHierarchy(
+                Collection<Class<? extends Annotation>> qualifierClasses,
+                Elements elements,
+                GenericAnnotatedTypeFactory<?, ?, ?, ?> atypeFactory) {
+            super(qualifierClasses, elements, atypeFactory);
+        }
+
+        @Override
+        public boolean isSubtypeQualifiers(AnnotationMirror subAnno, AnnotationMirror superAnno) {
+            // Lost is not reflexive and the only subtype is Bottom
+            if (atypeFactory.areSameByClass(superAnno, PICOLost.class)
+                    && !atypeFactory.areSameByClass(subAnno, PICOBottom.class)) {
+                return false;
+            }
+            return super.isSubtypeQualifiers(subAnno, superAnno);
         }
     }
 }
