@@ -39,8 +39,11 @@ public class PICOViewpointAdapter extends AbstractViewpointAdapter {
             return picoTypeFactory.IMMUTABLE;
         } else if (AnnotationUtils.areSame(declaredAnnotation, picoTypeFactory.BOTTOM)) {
             return picoTypeFactory.BOTTOM;
-        } else if (AnnotationUtils.areSame(declaredAnnotation, picoTypeFactory.POLY_MUTABLE)) {
+        } else if (AnnotationUtils.areSameByName(
+                declaredAnnotation, picoTypeFactory.POLY_MUTABLE)) {
             return picoTypeFactory.POLY_MUTABLE;
+        } else if (AnnotationUtils.areSame(declaredAnnotation, picoTypeFactory.LOST)) {
+            return picoTypeFactory.LOST;
         } else if (AnnotationUtils.areSame(
                 declaredAnnotation, picoTypeFactory.RECEIVER_DEPENDENT_MUTABLE)) {
             // @Readonly |> @ReceiverDependentMutable = @Lost
