@@ -87,7 +87,8 @@ public class PICONoInitVisitor extends BaseTypeVisitor<PICONoInitAnnotatedTypeFa
             AnnotatedDeclaredType declarationType, AnnotatedDeclaredType useType, Tree tree) {
 
         // FIXME workaround for poly anno, remove after fix substitutable poly and add poly vp rules
-        if (useType.hasAnnotation(atypeFactory.POLY_MUTABLE)) {
+        if (useType.hasAnnotation(atypeFactory.POLY_MUTABLE)
+                || useType.hasAnnotation(atypeFactory.LOST)) {
             return true;
         }
 
