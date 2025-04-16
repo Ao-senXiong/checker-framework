@@ -23,6 +23,7 @@ import org.checkerframework.framework.type.AnnotatedTypeFactory;
 import org.checkerframework.framework.type.AnnotatedTypeMirror;
 import org.checkerframework.framework.type.AnnotatedTypeMirror.AnnotatedExecutableType;
 import org.checkerframework.framework.type.GenericAnnotatedTypeFactory;
+import org.checkerframework.framework.type.NoElementQualifierHierarchy;
 import org.checkerframework.framework.type.QualifierHierarchy;
 import org.checkerframework.framework.type.ViewpointAdapter;
 import org.checkerframework.framework.type.treeannotator.ListTreeAnnotator;
@@ -43,6 +44,7 @@ import org.checkerframework.javacutil.TreeUtils;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -57,6 +59,7 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.Elements;
 
 /** AnnotatedTypeFactory for PICO. */
 public class PICONoInitAnnotatedTypeFactory
@@ -159,7 +162,8 @@ public class PICONoInitAnnotatedTypeFactory
         // annotation on new expression, replace it with @Immutable
         if (getExplicitNewClassAnnos(tree).isEmpty()
                 && constructor.getReturnType().hasAnnotation(RECEIVER_DEPENDENT_MUTABLE)) {
-            constructor.getReturnType().replaceAnnotation(IMMUTABLE);
+            // AOSEN: use mutable for case study
+            constructor.getReturnType().replaceAnnotation(MUTABLE);
         }
         return cType;
     }
@@ -204,7 +208,8 @@ public class PICONoInitAnnotatedTypeFactory
     protected AnnotationMirrorSet getDefaultTypeDeclarationBounds() {
         AnnotationMirrorSet classBoundDefault =
                 new AnnotationMirrorSet(super.getDefaultTypeDeclarationBounds());
-        return replaceAnnotationInHierarchy(classBoundDefault, IMMUTABLE);
+        // AOSEN use mutable for case study
+        return replaceAnnotationInHierarchy(classBoundDefault, MUTABLE);
     }
 
     @Override
@@ -307,7 +312,8 @@ public class PICONoInitAnnotatedTypeFactory
                 if (!explicitATM.hasAnnotationInHierarchy(READONLY)
                         && AnnotationUtils.containsSameByName(
                                 declBound, RECEIVER_DEPENDENT_MUTABLE)) {
-                    annotatedTypeMirror.replaceAnnotation(IMMUTABLE);
+                    // AOSEN: use mutable for case study
+                    annotatedTypeMirror.replaceAnnotation(MUTABLE);
                 }
             } else {
                 // Apply default annotation to instance fields if there is no explicit annotation
@@ -407,7 +413,8 @@ public class PICONoInitAnnotatedTypeFactory
             super.visitTypeCast(node, type);
             if (!hasExplicitAnnos
                     && type.hasAnnotation(picoTypeFactory.RECEIVER_DEPENDENT_MUTABLE)) {
-                type.replaceAnnotation(picoTypeFactory.IMMUTABLE);
+                // AOSEN: use mutable for case study
+                type.replaceAnnotation(picoTypeFactory.MUTABLE);
             }
             return null;
         }
@@ -442,7 +449,8 @@ public class PICONoInitAnnotatedTypeFactory
             // @Immutable. This will not change the mutability type when the component type is
             // explicit annotated.
             if (componentType.hasAnnotation(picoTypeFactory.RECEIVER_DEPENDENT_MUTABLE)) {
-                componentType.replaceAnnotation(picoTypeFactory.IMMUTABLE);
+                // AOSEN: use mutable for case study
+                componentType.replaceAnnotation(picoTypeFactory.MUTABLE);
             }
             return null;
         }
@@ -617,6 +625,33 @@ public class PICONoInitAnnotatedTypeFactory
                 type.addMissingAnnotations(Collections.singleton(picoTypeFactory.IMMUTABLE));
             }
             return super.visitDeclared(type, aVoid);
+        }
+    }
+
+    private static class PICOQualifierHierarchy extends NoElementQualifierHierarchy {
+
+        /**
+         * Creates a PICOQualifierHierarchy from the given classes.
+         *
+         * @param qualifierClasses classes of annotations that are the qualifiers
+         * @param elements element utils
+         * @param atypeFactory the associated type factory
+         */
+        public PICOQualifierHierarchy(
+                Collection<Class<? extends Annotation>> qualifierClasses,
+                Elements elements,
+                GenericAnnotatedTypeFactory<?, ?, ?, ?> atypeFactory) {
+            super(qualifierClasses, elements, atypeFactory);
+        }
+
+        @Override
+        public boolean isSubtypeQualifiers(AnnotationMirror subAnno, AnnotationMirror superAnno) {
+            // Lost is not reflexive and the only subtype is Bottom
+            if (atypeFactory.areSameByClass(superAnno, PICOLost.class)
+                    && !atypeFactory.areSameByClass(subAnno, PICOBottom.class)) {
+                return false;
+            }
+            return super.isSubtypeQualifiers(subAnno, superAnno);
         }
     }
 }

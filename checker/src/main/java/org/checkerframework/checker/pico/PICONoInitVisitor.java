@@ -86,7 +86,8 @@ public class PICONoInitVisitor extends BaseTypeVisitor<PICONoInitAnnotatedTypeFa
             AnnotatedDeclaredType declarationType, AnnotatedDeclaredType useType, Tree tree) {
 
         // FIXME workaround for poly anno, remove after fix substitutable poly and add poly vp rules
-        if (useType.hasAnnotation(atypeFactory.POLY_MUTABLE)) {
+        if (useType.hasAnnotation(atypeFactory.POLY_MUTABLE)
+                || useType.hasAnnotation(atypeFactory.LOST)) {
             return true;
         }
 
@@ -102,6 +103,16 @@ public class PICONoInitVisitor extends BaseTypeVisitor<PICONoInitAnnotatedTypeFa
         // That simply means that any use is valid except bottom.
         AnnotationMirror used = type.getAnnotationInHierarchy(atypeFactory.READONLY);
         return !AnnotationUtils.areSame(used, atypeFactory.BOTTOM);
+    }
+
+    @Override
+    protected boolean checkOverride(
+            MethodTree overriderTree,
+            AnnotatedExecutableType overriderMethodType,
+            AnnotatedDeclaredType overriderType,
+            AnnotatedExecutableType overriddenMethodType,
+            AnnotatedDeclaredType overriddenType) {
+        return true;
     }
 
     /**
