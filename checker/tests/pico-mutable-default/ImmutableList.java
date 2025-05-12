@@ -22,11 +22,14 @@ import java.util.List;
         list.add("hi");
     }
 
+    @SuppressWarnings(
+            "varargs.type.incompatible") // TODO: varargs with poly annotation not working correctly
     @Immutable ImmutableList(Object o1) {
         // One way to construct and immutable list is to pass the contents to the constructor
         list = new @Immutable ArrayList<String>(Arrays.asList("hi"));
     }
 
+    @SuppressWarnings("varargs.type.incompatible")
     @Immutable ImmutableList(Object o1, Object o2) {
         // Another way is to use Arrays.asList()
         list = Arrays.asList("hi");
