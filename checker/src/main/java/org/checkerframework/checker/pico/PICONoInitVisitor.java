@@ -390,24 +390,15 @@ public class PICONoInitVisitor extends BaseTypeVisitor<PICONoInitAnnotatedTypeFa
 
     @Override
     public Void visitNewArray(NewArrayTree tree, Void p) {
-        checkNewArrayCreation(tree);
-        return super.visitNewArray(tree, p);
-    }
-
-    /**
-     * Helper method to check the immutability type on new array creation. Only @Immutable, @Mutable
-     * and @ReceiverDependentMutable are allowed.
-     *
-     * @param tree the tree to check
-     */
-    private void checkNewArrayCreation(Tree tree) {
         AnnotatedTypeMirror type = atypeFactory.getAnnotatedType(tree);
+        //  Only @Immutable, @Mutable, @ReceiverDependentMutable and @PolyMutable are allowed.
         if (!(type.hasAnnotation(atypeFactory.IMMUTABLE)
                 || type.hasAnnotation(atypeFactory.MUTABLE)
                 || type.hasAnnotation(atypeFactory.RECEIVER_DEPENDENT_MUTABLE)
                 || type.hasAnnotation(atypeFactory.POLY_MUTABLE))) {
             checker.reportError(tree, "array.new.invalid", type);
         }
+        return super.visitNewArray(tree, p);
     }
 
     @Override
