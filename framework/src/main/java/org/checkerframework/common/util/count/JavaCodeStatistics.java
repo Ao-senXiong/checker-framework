@@ -13,11 +13,11 @@ import com.sun.source.tree.ParameterizedTypeTree;
 import com.sun.source.tree.TypeCastTree;
 import com.sun.tools.javac.util.Log;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.source.SourceChecker;
 import org.checkerframework.framework.source.SourceVisitor;
 import org.checkerframework.javacutil.AnnotationProvider;
 import org.checkerframework.javacutil.AnnotationUtils;
+import org.checkerframework.javacutil.BugInCF;
 import org.checkerframework.javacutil.TreeUtils;
 
 import java.util.List;
@@ -207,7 +207,7 @@ public class JavaCodeStatistics extends SourceChecker {
     }
 
     @Override
-    protected boolean isElementAnnotatedForThisCheckerOrUpstreamChecker(@Nullable Element elt) {
-        return false;
+    protected boolean isElementAnnotatedForThisCheckerOrUpstreamChecker(Element elt) {
+        throw new BugInCF("Unexpected call to determine whether this checker is annotated");
     }
 }

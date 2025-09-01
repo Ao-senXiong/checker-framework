@@ -2615,7 +2615,7 @@ public class AnnotationFileParser {
                             .equals("org.checkerframework.framework.qual.AnnotatedFor")) {
                 AnnotationMirror af = getAnnotation(ae, allAnnotations);
                 if (atypeFactory.areSameByClass(af, AnnotatedFor.class)) {
-                    return atypeFactory.isAnnotatedForThisCheckerOrUpstreamChecker(af);
+                    return atypeFactory.doesAnnotatedForApplyToThisChecker(af);
                 }
             }
         }

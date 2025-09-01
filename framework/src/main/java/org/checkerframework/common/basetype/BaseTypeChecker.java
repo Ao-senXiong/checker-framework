@@ -4,6 +4,7 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.dataflow.cfg.visualize.CFGVisualizer;
+import org.checkerframework.framework.qual.AnnotatedFor;
 import org.checkerframework.framework.qual.SubtypeOf;
 import org.checkerframework.framework.source.SourceChecker;
 import org.checkerframework.framework.type.AnnotatedTypeFactory;
@@ -22,6 +23,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.IdentityHashMap;
 import java.util.Set;
 
 import javax.lang.model.element.AnnotationMirror;
@@ -71,6 +73,9 @@ public abstract class BaseTypeChecker extends SourceChecker {
 
     /** An array containing just {@code BaseTypeChecker.class}. */
     protected static Class<?>[] baseTypeCheckerClassArray = new Class<?>[] {BaseTypeChecker.class};
+
+    /** A mapping of Element &rarr; Whether or not that element is AnnotatedFor this type system. */
+    private final IdentityHashMap<Element, Boolean> elementAnnotatedFors = new IdentityHashMap<>();
 
     /** Create a new BaseTypeChecker. */
     protected BaseTypeChecker() {}
@@ -315,8 +320,42 @@ public abstract class BaseTypeChecker extends SourceChecker {
         }
     }
 
+    /**
+     * Return true if the element has an {@code @AnnotatedFor} annotation, for this checker or an
+     * upstream checker that called this one.
+     *
+     * @param elt the source code element to check, or null
+     * @return true if the element is annotated for this checker or an upstream checker
+     */
     @Override
-    protected boolean isElementAnnotatedForThisCheckerOrUpstreamChecker(@Nullable Element elt) {
-        return getTypeFactory().isElementAnnotatedForThisCheckerOrUpstreamChecker(elt);
+    public boolean isElementAnnotatedForThisCheckerOrUpstreamChecker(Element elt) {
+        boolean elementAnnotatedForThisChecker = false;
+
+        if (elt == null) {
+            throw new BugInCF("Call of BaseTypeChecker.isElementAnnotatedForThisChecker with null");
+        }
+
+        if (elementAnnotatedFors.containsKey(elt)) {
+            return elementAnnotatedFors.get(elt);
+        }
+
+        AnnotationMirror annotatedFor = getTypeFactory().getDeclAnnotation(elt, AnnotatedFor.class);
+
+        if (annotatedFor != null) {
+            elementAnnotatedForThisChecker =
+                    getTypeFactory().doesAnnotatedForApplyToThisChecker(annotatedFor);
+        }
+
+        if (!elementAnnotatedForThisChecker) {
+            Element parent = elt.getEnclosingElement();
+
+            if (parent != null && isElementAnnotatedForThisCheckerOrUpstreamChecker(parent)) {
+                elementAnnotatedForThisChecker = true;
+            }
+        }
+
+        elementAnnotatedFors.put(elt, elementAnnotatedForThisChecker);
+
+        return elementAnnotatedForThisChecker;
     }
 }

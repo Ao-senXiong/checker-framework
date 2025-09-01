@@ -24,6 +24,7 @@ import org.checkerframework.framework.source.SourceChecker;
 import org.checkerframework.framework.source.SourceVisitor;
 import org.checkerframework.framework.source.SupportedOptions;
 import org.checkerframework.javacutil.AnnotationProvider;
+import org.checkerframework.javacutil.BugInCF;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -331,6 +332,6 @@ public class AnnotationStatistics extends SourceChecker {
 
     @Override
     protected boolean isElementAnnotatedForThisCheckerOrUpstreamChecker(@Nullable Element elt) {
-        return false;
+        throw new BugInCF("Unexpected call to determine whether this checker is annotated");
     }
 }

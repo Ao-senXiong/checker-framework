@@ -3,7 +3,7 @@ package org.checkerframework.framework.source;
 import com.sun.source.tree.CompilationUnitTree;
 import com.sun.source.tree.Tree;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.javacutil.BugInCF;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -57,7 +57,7 @@ public abstract class AggregateChecker extends SourceChecker {
     }
 
     @Override
-    protected boolean isElementAnnotatedForThisCheckerOrUpstreamChecker(@Nullable Element elt) {
-        return false;
+    protected boolean isElementAnnotatedForThisCheckerOrUpstreamChecker(Element elt) {
+        throw new BugInCF("Unexpected call to determine whether this checker is annotated");
     }
 }
