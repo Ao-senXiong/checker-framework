@@ -14,6 +14,7 @@ import org.checkerframework.framework.type.TypeHierarchy;
 import org.checkerframework.javacutil.AbstractTypeProcessor;
 import org.checkerframework.javacutil.AnnotationProvider;
 import org.checkerframework.javacutil.BugInCF;
+import org.checkerframework.javacutil.ElementUtils;
 import org.checkerframework.javacutil.TypeSystemError;
 import org.checkerframework.javacutil.UserError;
 import org.plumelib.util.CollectionsPlume;
@@ -28,6 +29,8 @@ import java.util.Set;
 
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.PackageElement;
 
 /**
  * An abstract {@link SourceChecker} that provides a simple {@link
@@ -347,7 +350,12 @@ public abstract class BaseTypeChecker extends SourceChecker {
         }
 
         if (!elementAnnotatedForThisChecker) {
-            Element parent = elt.getEnclosingElement();
+            Element parent;
+            if (elt.getKind() == ElementKind.PACKAGE) {
+                parent = ElementUtils.parentPackage((PackageElement) elt, elements);
+            } else {
+                parent = elt.getEnclosingElement();
+            }
 
             if (parent != null && isElementAnnotatedForThisCheckerOrUpstreamChecker(parent)) {
                 elementAnnotatedForThisChecker = true;
