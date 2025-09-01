@@ -766,8 +766,9 @@ public class QualifierDefaults {
                         && !isFromStubFile;
         if (isBytecode) {
             return useConservativeDefaultsBytecode
-                    && !atypeFactory.checker.isElementAnnotatedForThisCheckerOrUpstreamChecker(
-                            annotationScope);
+                    && !atypeFactory
+                            .getChecker()
+                            .isElementAnnotatedForThisCheckerOrUpstreamChecker(annotationScope);
         } else if (isFromStubFile) {
             // TODO: Types in stub files not annotated for a particular checker should be
             // treated as unchecked bytecode.  For now, all types in stub files are treated as
@@ -776,8 +777,9 @@ public class QualifierDefaults {
             // be treated like unchecked code except for methods in the scope of an @AnnotatedFor.
             return false;
         } else if (useConservativeDefaultsSource) {
-            return !atypeFactory.checker.isElementAnnotatedForThisCheckerOrUpstreamChecker(
-                    annotationScope);
+            return !atypeFactory
+                    .getChecker()
+                    .isElementAnnotatedForThisCheckerOrUpstreamChecker(annotationScope);
         }
         return false;
     }

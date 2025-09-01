@@ -352,7 +352,7 @@ public class AnnotatedTypeFactory implements AnnotationProvider {
     private final AnnotationMirrorSet inheritedAnnotations = new AnnotationMirrorSet();
 
     /** The checker to use for option handling and resource management. */
-    public final BaseTypeChecker checker;
+    protected final BaseTypeChecker checker;
 
     /**
      * Scans all parts of the {@link AnnotatedTypeMirror} so that all of its fields are initialized.
