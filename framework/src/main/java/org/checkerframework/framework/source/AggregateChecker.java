@@ -3,8 +3,6 @@ package org.checkerframework.framework.source;
 import com.sun.source.tree.CompilationUnitTree;
 import com.sun.source.tree.Tree;
 
-import org.checkerframework.javacutil.BugInCF;
-
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -56,8 +54,13 @@ public abstract class AggregateChecker extends SourceChecker {
         };
     }
 
+    /**
+     * Return false, determine whether an aggregatechecker is annotated for depends on its
+     * subcheckers. For checkers that have upstream checker and want to handle annotatedfor in both
+     * this and upstream checker, See {@link InitializationChecker#getUpstreamCheckerNames()}
+     */
     @Override
     protected boolean isElementAnnotatedForThisCheckerOrUpstreamChecker(Element elt) {
-        throw new BugInCF("Unexpected call to determine whether this checker is annotated");
+        return false;
     }
 }
