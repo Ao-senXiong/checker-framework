@@ -435,7 +435,7 @@ public abstract class GenericAnnotatedTypeFactory<
         this.transfer = analysis.getTransferFunction();
         this.emptyStore = analysis.createEmptyStore(transfer.usesSequentialSemantics());
 
-        this.parseAnnotationFiles();
+        //        this.parseAnnotationFiles();
 
         this.inferredTypesApplier = new DefaultInferredTypesApplier(getQualifierHierarchy(), this);
     }
