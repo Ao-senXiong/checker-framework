@@ -19,7 +19,6 @@ import com.sun.source.util.TreePath;
 import com.sun.tools.javac.tree.JCTree.JCAnnotation;
 import com.sun.tools.javac.util.Log;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.source.SourceChecker;
 import org.checkerframework.framework.source.SourceVisitor;
 import org.checkerframework.framework.source.SupportedOptions;
@@ -331,7 +330,7 @@ public class AnnotationStatistics extends SourceChecker {
     }
 
     @Override
-    protected boolean isElementAnnotatedForThisCheckerOrUpstreamChecker(@Nullable Element elt) {
+    protected boolean isElementAnnotatedForThisCheckerOrUpstreamChecker(Element elt) {
         throw new BugInCF("Unexpected call to determine whether this checker is annotated");
     }
 }
