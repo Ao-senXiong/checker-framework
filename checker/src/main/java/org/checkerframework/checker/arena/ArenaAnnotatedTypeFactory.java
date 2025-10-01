@@ -10,6 +10,7 @@ import javax.lang.model.element.AnnotationMirror;
 
 public class ArenaAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
 
+    @SuppressWarnings("this-escape")
     public ArenaAnnotatedTypeFactory(BaseTypeChecker checker) {
         super(checker);
         postInit();
