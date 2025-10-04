@@ -5,12 +5,13 @@ import com.sun.source.tree.AssignmentTree;
 import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.CompoundAssignmentTree;
 import com.sun.source.tree.ExpressionTree;
+import com.sun.source.tree.IdentifierTree;
+import com.sun.source.tree.MemberSelectTree;
 import com.sun.source.tree.MethodInvocationTree;
 import com.sun.source.tree.MethodTree;
 import com.sun.source.tree.NewArrayTree;
 import com.sun.source.tree.NewClassTree;
 import com.sun.source.tree.Tree;
-import com.sun.source.tree.Tree.Kind;
 import com.sun.source.tree.UnaryTree;
 import com.sun.source.tree.VariableTree;
 
@@ -86,7 +87,8 @@ public class PICONoInitVisitor extends BaseTypeVisitor<PICONoInitAnnotatedTypeFa
             AnnotatedDeclaredType declarationType, AnnotatedDeclaredType useType, Tree tree) {
 
         // FIXME workaround for poly anno, remove after fix substitutable poly and add poly vp rules
-        if (useType.hasAnnotation(atypeFactory.POLY_MUTABLE)) {
+        if (useType.hasAnnotation(atypeFactory.POLY_MUTABLE)
+                || useType.hasAnnotation(atypeFactory.LOST)) {
             return true;
         }
 
@@ -102,6 +104,16 @@ public class PICONoInitVisitor extends BaseTypeVisitor<PICONoInitAnnotatedTypeFa
         // That simply means that any use is valid except bottom.
         AnnotationMirror used = type.getAnnotationInHierarchy(atypeFactory.READONLY);
         return !AnnotationUtils.areSame(used, atypeFactory.BOTTOM);
+    }
+
+    @Override
+    protected boolean checkOverride(
+            MethodTree overriderTree,
+            AnnotatedExecutableType overriderMethodType,
+            AnnotatedDeclaredType overriderType,
+            AnnotatedExecutableType overriddenMethodType,
+            AnnotatedDeclaredType overriddenType) {
+        return true;
     }
 
     /**
@@ -350,12 +362,12 @@ public class PICONoInitVisitor extends BaseTypeVisitor<PICONoInitAnnotatedTypeFa
      */
     private void reportFieldOrArrayWriteError(
             Tree tree, ExpressionTree variable, AnnotatedTypeMirror receiverType) {
-        if (variable.getKind() == Kind.MEMBER_SELECT) {
+        if (variable instanceof MemberSelectTree) {
             checker.reportError(
                     TreeUtils.getReceiverTree(variable), "illegal.field.write", receiverType);
-        } else if (variable.getKind() == Kind.IDENTIFIER) {
+        } else if (variable instanceof IdentifierTree) {
             checker.reportError(tree, "illegal.field.write", receiverType);
-        } else if (variable.getKind() == Kind.ARRAY_ACCESS) {
+        } else if (variable instanceof ArrayAccessTree) {
             checker.reportError(
                     ((ArrayAccessTree) variable).getExpression(),
                     "illegal.array.write",
@@ -379,24 +391,15 @@ public class PICONoInitVisitor extends BaseTypeVisitor<PICONoInitAnnotatedTypeFa
 
     @Override
     public Void visitNewArray(NewArrayTree tree, Void p) {
-        checkNewArrayCreation(tree);
-        return super.visitNewArray(tree, p);
-    }
-
-    /**
-     * Helper method to check the immutability type on new array creation. Only @Immutable, @Mutable
-     * and @ReceiverDependentMutable are allowed.
-     *
-     * @param tree the tree to check
-     */
-    private void checkNewArrayCreation(Tree tree) {
         AnnotatedTypeMirror type = atypeFactory.getAnnotatedType(tree);
+        //  Only @Immutable, @Mutable, @ReceiverDependentMutable and @PolyMutable are allowed.
         if (!(type.hasAnnotation(atypeFactory.IMMUTABLE)
                 || type.hasAnnotation(atypeFactory.MUTABLE)
                 || type.hasAnnotation(atypeFactory.RECEIVER_DEPENDENT_MUTABLE)
                 || type.hasAnnotation(atypeFactory.POLY_MUTABLE))) {
             checker.reportError(tree, "array.new.invalid", type);
         }
+        return super.visitNewArray(tree, p);
     }
 
     @Override
@@ -458,7 +461,7 @@ public class PICONoInitVisitor extends BaseTypeVisitor<PICONoInitAnnotatedTypeFa
         if (bound.hasAnnotation(atypeFactory.IMMUTABLE)
                 || bound.hasAnnotation(atypeFactory.RECEIVER_DEPENDENT_MUTABLE)) {
             for (Tree member : tree.getMembers()) {
-                if (member.getKind() == Kind.VARIABLE) {
+                if (member instanceof VariableTree) {
                     Element ele = TreeUtils.elementFromTree(member);
                     assert ele != null;
                     // fromElement will not apply defaults, if no explicit anno exists in code,

@@ -31,7 +31,7 @@ public class PICONoInitTransfer
                 && n.getTarget().getTree() instanceof VariableTree) {
             VariableElement varElement =
                     TreeUtils.elementFromDeclaration((VariableTree) n.getTarget().getTree());
-            // Below is for removing false positive warning of bottom illegal write cacused by
+            // Below is for removing false positive warning of bottom illegal write caused by
             // refining field to @Bottom if field initializer is null.
             // Forbid refinement from null literal in initializer to fields variable tree(identifier
             // tree not affected, e.g.

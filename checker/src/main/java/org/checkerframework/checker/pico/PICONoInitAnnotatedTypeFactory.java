@@ -99,6 +99,7 @@ public class PICONoInitAnnotatedTypeFactory
      *
      * @param checker the BaseTypeChecker
      */
+    @SuppressWarnings("this-escape")
     public PICONoInitAnnotatedTypeFactory(BaseTypeChecker checker) {
         super(checker);
         addAliasedTypeAnnotation(org.jmlspecs.annotation.Readonly.class, READONLY);
@@ -159,7 +160,8 @@ public class PICONoInitAnnotatedTypeFactory
         // annotation on new expression, replace it with @Immutable
         if (getExplicitNewClassAnnos(tree).isEmpty()
                 && constructor.getReturnType().hasAnnotation(RECEIVER_DEPENDENT_MUTABLE)) {
-            constructor.getReturnType().replaceAnnotation(IMMUTABLE);
+            // TODO(AOSEN): use mutable for case study
+            constructor.getReturnType().replaceAnnotation(MUTABLE);
         }
         return cType;
     }
@@ -204,7 +206,8 @@ public class PICONoInitAnnotatedTypeFactory
     protected AnnotationMirrorSet getDefaultTypeDeclarationBounds() {
         AnnotationMirrorSet classBoundDefault =
                 new AnnotationMirrorSet(super.getDefaultTypeDeclarationBounds());
-        return replaceAnnotationInHierarchy(classBoundDefault, IMMUTABLE);
+        // TODO(AOSEN)： use mutable for case study
+        return replaceAnnotationInHierarchy(classBoundDefault, MUTABLE);
     }
 
     @Override
@@ -307,7 +310,8 @@ public class PICONoInitAnnotatedTypeFactory
                 if (!explicitATM.hasAnnotationInHierarchy(READONLY)
                         && AnnotationUtils.containsSameByName(
                                 declBound, RECEIVER_DEPENDENT_MUTABLE)) {
-                    annotatedTypeMirror.replaceAnnotation(IMMUTABLE);
+                    // TODO(AOSEN): use mutable for case study
+                    annotatedTypeMirror.replaceAnnotation(MUTABLE);
                 }
             } else {
                 // Apply default annotation to instance fields if there is no explicit annotation
@@ -407,7 +411,8 @@ public class PICONoInitAnnotatedTypeFactory
             super.visitTypeCast(node, type);
             if (!hasExplicitAnnos
                     && type.hasAnnotation(picoTypeFactory.RECEIVER_DEPENDENT_MUTABLE)) {
-                type.replaceAnnotation(picoTypeFactory.IMMUTABLE);
+                // TODO(AOSEN): use mutable for case study
+                type.replaceAnnotation(picoTypeFactory.MUTABLE);
             }
             return null;
         }
@@ -442,7 +447,8 @@ public class PICONoInitAnnotatedTypeFactory
             // @Immutable. This will not change the mutability type when the component type is
             // explicit annotated.
             if (componentType.hasAnnotation(picoTypeFactory.RECEIVER_DEPENDENT_MUTABLE)) {
-                componentType.replaceAnnotation(picoTypeFactory.IMMUTABLE);
+                // TODO(AOSEN): use mutable for case study
+                componentType.replaceAnnotation(picoTypeFactory.MUTABLE);
             }
             return null;
         }
