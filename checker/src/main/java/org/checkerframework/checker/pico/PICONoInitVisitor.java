@@ -5,12 +5,13 @@ import com.sun.source.tree.AssignmentTree;
 import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.CompoundAssignmentTree;
 import com.sun.source.tree.ExpressionTree;
+import com.sun.source.tree.IdentifierTree;
+import com.sun.source.tree.MemberSelectTree;
 import com.sun.source.tree.MethodInvocationTree;
 import com.sun.source.tree.MethodTree;
 import com.sun.source.tree.NewArrayTree;
 import com.sun.source.tree.NewClassTree;
 import com.sun.source.tree.Tree;
-import com.sun.source.tree.Tree.Kind;
 import com.sun.source.tree.UnaryTree;
 import com.sun.source.tree.VariableTree;
 
@@ -361,12 +362,12 @@ public class PICONoInitVisitor extends BaseTypeVisitor<PICONoInitAnnotatedTypeFa
      */
     private void reportFieldOrArrayWriteError(
             Tree tree, ExpressionTree variable, AnnotatedTypeMirror receiverType) {
-        if (variable.getKind() == Kind.MEMBER_SELECT) {
+        if (variable instanceof MemberSelectTree) {
             checker.reportError(
                     TreeUtils.getReceiverTree(variable), "illegal.field.write", receiverType);
-        } else if (variable.getKind() == Kind.IDENTIFIER) {
+        } else if (variable instanceof IdentifierTree) {
             checker.reportError(tree, "illegal.field.write", receiverType);
-        } else if (variable.getKind() == Kind.ARRAY_ACCESS) {
+        } else if (variable instanceof ArrayAccessTree) {
             checker.reportError(
                     ((ArrayAccessTree) variable).getExpression(),
                     "illegal.array.write",
@@ -460,7 +461,7 @@ public class PICONoInitVisitor extends BaseTypeVisitor<PICONoInitAnnotatedTypeFa
         if (bound.hasAnnotation(atypeFactory.IMMUTABLE)
                 || bound.hasAnnotation(atypeFactory.RECEIVER_DEPENDENT_MUTABLE)) {
             for (Tree member : tree.getMembers()) {
-                if (member.getKind() == Kind.VARIABLE) {
+                if (member instanceof VariableTree) {
                     Element ele = TreeUtils.elementFromTree(member);
                     assert ele != null;
                     // fromElement will not apply defaults, if no explicit anno exists in code,

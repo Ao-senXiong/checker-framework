@@ -10,8 +10,7 @@ import org.checkerframework.checker.pico.qual.ReceiverDependentMutable;
         return c.identity();
     }
 
-    @PolyMutable
-    ChainOfCallLost identity(@PolyMutable ChainOfCallLost this) {
+    @PolyMutable ChainOfCallLost identity(@PolyMutable ChainOfCallLost this) {
         return this;
     }
 }

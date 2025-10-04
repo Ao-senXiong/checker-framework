@@ -7,14 +7,12 @@ import org.checkerframework.checker.pico.qual.ReceiverDependentMutable;
 public @ReceiverDependentMutable class FactoryPattern {
     public @ReceiverDependentMutable FactoryPattern() {}
 
-    @PolyMutable
-    Object createObject(@PolyMutable FactoryPattern this) {
+    @PolyMutable Object createObject(@PolyMutable FactoryPattern this) {
         return new @PolyMutable Object();
     }
 
     // Should issue error because the context can not resolved based on assignment
-    @PolyMutable
-    Object createObjectA(@Readonly FactoryPattern this) {
+    @PolyMutable Object createObjectA(@Readonly FactoryPattern this) {
         return new @PolyMutable Object();
     }
 
