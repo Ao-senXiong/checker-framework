@@ -99,6 +99,7 @@ public class PICONoInitAnnotatedTypeFactory
      *
      * @param checker the BaseTypeChecker
      */
+    @SuppressWarnings("this-escape")
     public PICONoInitAnnotatedTypeFactory(BaseTypeChecker checker) {
         super(checker);
         addAliasedTypeAnnotation(org.jmlspecs.annotation.Readonly.class, READONLY);
