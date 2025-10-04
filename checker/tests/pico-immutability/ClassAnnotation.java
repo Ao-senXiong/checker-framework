@@ -22,8 +22,7 @@ public class ClassAnnotation {
     @Readonly interface ReadonlyInterface {}
 
     // :: error: class.bound.invalid
-    @PolyMutable
-    interface PolyMutableInterface {}
+    @PolyMutable interface PolyMutableInterface {}
 
     /* @Immutable */ abstract class ImmutableAbstractClassImplict {}
 
@@ -37,8 +36,7 @@ public class ClassAnnotation {
     @Readonly abstract class ReadonlyAbstractClass {}
 
     // :: error: class.bound.invalid
-    @PolyMutable
-    abstract class PolyMutableAbstractClass {}
+    @PolyMutable abstract class PolyMutableAbstractClass {}
 
     /* @Immutable */ class ImmutableClassImplict {
 
@@ -127,8 +125,7 @@ public class ClassAnnotation {
     @Readonly class ReadonlyClass {}
 
     // :: error: class.bound.invalid
-    @PolyMutable
-    class PolyMutableClass {}
+    @PolyMutable class PolyMutableClass {}
 
     void testObjectCreation() {
         // Default to @Immutable for RDM class constructor without annotation
