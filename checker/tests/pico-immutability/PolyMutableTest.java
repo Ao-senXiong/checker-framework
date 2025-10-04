@@ -63,7 +63,8 @@ public class PolyMutableTest {
         }
     }
 
-    @PolyMutable Object bar(@PolyMutable A a) {
+    @PolyMutable
+    Object bar(@PolyMutable A a) {
         // Typecheck now. Only when the declared type is @PolyMutable, after viewpoint adadptation,
         // it becomes @SubsitutablePolyMutable, and then will be resolved by QualifierPolymorphism
         // Note: viewpoint adaptation(ATF) happens before QualfierPolymorphism(GATF) in current
@@ -73,15 +74,18 @@ public class PolyMutableTest {
     }
 
     @ReceiverDependentMutable class B {
-        @PolyMutable B getObject(@Mutable B this) {
+        @PolyMutable
+        B getObject(@Mutable B this) {
             return null;
         }
 
-        @PolyMutable B getSecondObject(@PolyMutable B this) {
+        @PolyMutable
+        B getSecondObject(@PolyMutable B this) {
             return null;
         }
 
-        @PolyMutable B getThirdObject(@Mutable B this) {
+        @PolyMutable
+        B getThirdObject(@Mutable B this) {
             return null;
         }
 

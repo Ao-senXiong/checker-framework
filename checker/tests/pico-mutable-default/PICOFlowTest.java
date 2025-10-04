@@ -7,7 +7,8 @@ import org.checkerframework.checker.pico.qual.ReceiverDependentMutable;
 
 public class PICOFlowTest {
 
-    @PolyMutable Object test(@PolyMutable Object obj) {
+    @PolyMutable
+    Object test(@PolyMutable Object obj) {
         Object o = new @PolyMutable Object();
         return o;
     }
@@ -23,7 +24,8 @@ public class PICOFlowTest {
     @ReceiverDependentMutable class BaseClass {
         @ReceiverDependentMutable BaseClass b;
 
-        @PolyMutable BaseClass testFlowInner(@PolyMutable BaseClass this) {
+        @PolyMutable
+        BaseClass testFlowInner(@PolyMutable BaseClass this) {
             BaseClass local = b;
             return b;
         }

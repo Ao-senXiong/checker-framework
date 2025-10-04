@@ -28,7 +28,8 @@ import org.checkerframework.checker.pico.qual.ReceiverDependentMutable;
     // :: error: (type.invalid.annotations.on.location) :: error: (invalid.polymorphic.qualifier)
     class PICOTypeUseLocationFail<@PolyMutable T, S extends @PolyMutable Object> {
         // :: error: (type.invalid.annotations.on.location) :: error: (constructor.return.invalid)
-        @PolyMutable PICOTypeUseLocationFail() {}
+        @PolyMutable
+        PICOTypeUseLocationFail() {}
 
         // :: error: (super.invocation.invalid) :: error: (constructor.return.invalid)
         @Readonly PICOTypeUseLocationFail(int a) {}

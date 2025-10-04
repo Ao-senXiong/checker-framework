@@ -21,7 +21,8 @@ import org.checkerframework.checker.pico.qual.ReceiverDependentMutable;
     @Readonly interface ReadonlyInterface {}
 
     // :: error: class.bound.invalid
-    @PolyMutable interface PolyMutableInterface {}
+    @PolyMutable
+    interface PolyMutableInterface {}
 
     @Immutable abstract class ImmutableAbstractClassImplict {}
 
@@ -35,7 +36,8 @@ import org.checkerframework.checker.pico.qual.ReceiverDependentMutable;
     @Readonly abstract class ReadonlyAbstractClass {}
 
     // :: error: class.bound.invalid
-    @PolyMutable abstract class PolyMutableAbstractClass {}
+    @PolyMutable
+    abstract class PolyMutableAbstractClass {}
 
     @Immutable class ImmutableClassImplict {
 
@@ -124,7 +126,8 @@ import org.checkerframework.checker.pico.qual.ReceiverDependentMutable;
     @Readonly class ReadonlyClass {}
 
     // :: error: class.bound.invalid
-    @PolyMutable class PolyMutableClass {}
+    @PolyMutable
+    class PolyMutableClass {}
 
     void testObjectCreation() {
         // Default to @Mutable for RDM class constructor without annotation
