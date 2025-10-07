@@ -5,6 +5,7 @@ import org.checkerframework.common.basetype.BaseTypeChecker;
 import org.checkerframework.framework.type.MostlyNoElementQualifierHierarchy;
 import org.checkerframework.framework.type.QualifierHierarchy;
 import org.checkerframework.framework.util.QualifierKind;
+import org.checkerframework.javacutil.AnnotationUtils;
 
 import javax.lang.model.element.AnnotationMirror;
 
@@ -21,7 +22,6 @@ public class ArenaAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
         return new ArenaAnnotatedTypeFactory.ArenaQualifierHierarchy();
     }
 
-    // TODO: how to ensure only variable is used for arena string?
     // TODO: implment subtype bewteen @Arena("x") = @Arena("y")
     class ArenaQualifierHierarchy extends MostlyNoElementQualifierHierarchy {
         protected ArenaQualifierHierarchy() {
@@ -37,7 +37,8 @@ public class ArenaAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
                 QualifierKind subKind,
                 AnnotationMirror superAnno,
                 QualifierKind superKind) {
-            return false;
+            // If the arena name is the same, then return true
+            return AnnotationUtils.areSame(subAnno, superAnno);
         }
 
         @Override

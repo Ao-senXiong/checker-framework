@@ -6,9 +6,10 @@ class Test {
     // More validation need to do, need to check whether "#1" is actuall arena type
     // TODO METHOD AND CLASS REGION PARAMTER
     // TODO DSL to convert arena based implementation
-    void allSubtypingRelationships(@Arena("#1") Object x, @Arena("#2") Object y) {
+    void allSubtypingRelationships(@Arena("#1") Object x, @Arena("#2") Object y, @Arena("#1") Object z) {
         // :: error: (assignment.type.incompatible)
         x = y;
+        x = z;
     }
 
     // @ArenaParameter("p") what would be the default?
