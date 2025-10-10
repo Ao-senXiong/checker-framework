@@ -1,4 +1,4 @@
-package org.checkerframework.checker.arena;
+package org.checkerframework.checker.region;
 
 import org.checkerframework.common.basetype.BaseAnnotatedTypeFactory;
 import org.checkerframework.common.basetype.BaseTypeChecker;
@@ -9,26 +9,25 @@ import org.checkerframework.javacutil.AnnotationUtils;
 
 import javax.lang.model.element.AnnotationMirror;
 
-public class ArenaAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
+public class RegionAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
 
     @SuppressWarnings("this-escape")
-    public ArenaAnnotatedTypeFactory(BaseTypeChecker checker) {
+    public RegionAnnotatedTypeFactory(BaseTypeChecker checker) {
         super(checker);
         postInit();
     }
 
     @Override
     protected QualifierHierarchy createQualifierHierarchy() {
-        return new ArenaAnnotatedTypeFactory.ArenaQualifierHierarchy();
+        return new RegionAnnotatedTypeFactory.RegionQualifierHierarchy();
     }
 
-    // TODO: implment subtype bewteen @Arena("x") = @Arena("y")
-    class ArenaQualifierHierarchy extends MostlyNoElementQualifierHierarchy {
-        protected ArenaQualifierHierarchy() {
+    class RegionQualifierHierarchy extends MostlyNoElementQualifierHierarchy {
+        protected RegionQualifierHierarchy() {
             super(
-                    ArenaAnnotatedTypeFactory.this.getSupportedTypeQualifiers(),
+                    RegionAnnotatedTypeFactory.this.getSupportedTypeQualifiers(),
                     elements,
-                    ArenaAnnotatedTypeFactory.this);
+                    RegionAnnotatedTypeFactory.this);
         }
 
         @Override

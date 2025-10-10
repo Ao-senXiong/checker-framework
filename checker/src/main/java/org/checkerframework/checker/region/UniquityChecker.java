@@ -1,4 +1,4 @@
-package org.checkerframework.checker.arena;
+package org.checkerframework.checker.region;
 
 import org.checkerframework.common.aliasing.AliasingChecker;
 import org.checkerframework.framework.source.AggregateChecker;
@@ -13,7 +13,7 @@ public class UniquityChecker extends AggregateChecker {
     @Override
     protected Collection<Class<? extends SourceChecker>> getSupportedCheckers() {
         Set<Class<? extends SourceChecker>> checkers = new LinkedHashSet<>(2);
-        checkers.add(ArenaTypeChecker.class);
+        checkers.add(RegionTypeChecker.class);
         checkers.add(AliasingChecker.class);
 
         return checkers;

@@ -1,4 +1,4 @@
-package org.checkerframework.checker.arena.qual;
+package org.checkerframework.checker.region.qual;
 
 import org.checkerframework.framework.qual.JavaExpression;
 import org.checkerframework.framework.qual.SubtypeOf;
@@ -12,8 +12,8 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE_PARAMETER, ElementType.TYPE_USE})
-@SubtypeOf({RootArena.class})
-public @interface Arena {
+@SubtypeOf({RootRegion.class})
+public @interface Region {
     @JavaExpression
     String[] value() default {};
 }
